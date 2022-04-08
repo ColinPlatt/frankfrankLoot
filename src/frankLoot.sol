@@ -69,13 +69,13 @@ contract FrankLoot is ERC721, ERC2981 {
 
     function getLine(uint256 tokenId, uint256 line) internal view returns (string memory) {
         uint256 franksThisLine = franksPerLine(tokenId, line);
-        uint256 greatness = random(string(abi.encodePacked(SEED, line, tokenId.toString()))) % 21;
+        uint256 greatness = random(string(abi.encodePacked(SEED, tokenId.toString()))) % 21;
 
         string memory output;
 
         for(uint256 i = 0; i < franksThisLine; i++) {
             uint256 rand = random(string(abi.encodePacked(SEED, i, line, tokenId.toString())));
-            if (greatness > 1) {
+            if (greatness > 18) {
                 output = string(abi.encodePacked(output, franks[rand % franks.length]));
             } else {
                 output = string(abi.encodePacked(output, franks[rand % 4]));
