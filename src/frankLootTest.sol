@@ -24,7 +24,8 @@ contract FrankLoot is ERC721, ERC2981 {
     uint256 public pricePerFrank = 0.042069 ether;
     address public owner;
 
-    IFrank public immutable frank = IFrank(0x91680cF5F9071cafAE21B90ebf2c9CC9e480fB93);
+    //IFrank public immutable frank = IFrank(0x91680cF5F9071cafAE21B90ebf2c9CC9e480fB93);
+    IFrank public frank;
 
     uint256 public SEED;
 
@@ -79,10 +80,12 @@ contract FrankLoot is ERC721, ERC2981 {
 
     constructor(address _frank)
     ERC721("frankLoot", "FRANKLOOT") {
+        frank = IFrank(_frank);
         _royaltyFee = 700;
         _royaltyRecipient = msg.sender;
         SEED = random(block.timestamp.toString());
         owner = msg.sender;
+        testMint(100);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -175,6 +178,14 @@ contract FrankLoot is ERC721, ERC2981 {
         require(frankId >= 2000 && frankId < 4000, "FRANKLY_INVALID");
         _safeMint(msg.sender, frankId);
     }
+
+    function testMint(uint256 amount) internal {
+        for (uint256 i = 0; i <amount; i++) {
+            _safeMint(msg.sender, i);
+        }
+        
+    }
+
 
     /*//////////////////////////////////////////////////////////////
                         FRANKLY VIEW FUNCTIONS
