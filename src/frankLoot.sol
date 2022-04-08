@@ -77,7 +77,7 @@ contract FrankLoot is ERC721, ERC2981 {
                                 CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
 
-    constructor(address _frank)
+    constructor()
     ERC721("frankLoot", "FRANKLOOT") {
         _royaltyFee = 700;
         _royaltyRecipient = msg.sender;
