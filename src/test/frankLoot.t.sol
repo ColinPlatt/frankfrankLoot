@@ -3,13 +3,14 @@ pragma solidity 0.8.12;
 
 import "ds-test/test.sol";
 import "../frankLoot.sol";
-import "./dummyERC721.sol";
+import "../dummyERC721.sol";
 import {ERC721TokenReceiver} from "solmate/tokens/ERC721.sol";
 
 contract FrankLootTest is DSTest, ERC721TokenReceiver {
     
     DummyERC721 public frank;
     FrankLoot public frankLoot;
+
 
     address public operator;
     address public from;
@@ -31,7 +32,7 @@ contract FrankLootTest is DSTest, ERC721TokenReceiver {
     }
 
     function setUp() public {
-        frank = new DummyERC721("frank", "FRANK");
+        frank = new DummyERC721();
         frankLoot = new FrankLoot(address(frank));
     }
 
@@ -84,7 +85,9 @@ contract FrankLootTest is DSTest, ERC721TokenReceiver {
 
         frankLoot.mintWithFrank(bulkList);
 
-        emit log_string(frankLoot.tokenURI(9));
+        assertEq(frankLoot.balanceOf(address(this)), 10);
+
+        emit log_string(frankLoot.tokenURI(8));
     }
 
     

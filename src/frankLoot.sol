@@ -21,6 +21,9 @@ contract FrankLoot is ERC721, ERC2981 {
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
 
+    uint256 public pricePerFrank = 0.042069 ether;
+    address public owner;
+
     //IFrank public immutable frank = IFrank(0x91680cF5F9071cafAE21B90ebf2c9CC9e480fB93);
     IFrank public frank;
 
@@ -51,18 +54,11 @@ contract FrankLoot is ERC721, ERC2981 {
         "FRANK",
         "frank ", 
         "FRANK ",
-        "frank",
-        "frank",
-        "frank",
-        "FRANK",
-        "frank ", 
-        "FRANK ",
-        unicode"f̶̤͐r̵̂ͅă̶̘n̷̘͑k̷̤̎",
         unicode"f̶̝̊̒r̶̙̄͠a̵͍̺̖̾͊͝ǹ̸̘̖̄̀k̶̬̙̲͊͋",
         unicode"F̴̥̬̃͋̆R̵͋̿͒ͅÄ̴̡͈͜͠Ṇ̶͕͈̀K̵̹͚̏̂",
         unicode"F̶͕̾R̸̬͐A̶͇̒N̷̢̆K̶̮͗",
-        unicode"f̵͎̦̠̻̮͍̝̍́́̎̐͋͊̂̾̈̀͊̑̚ŗ̸̱̺̹͖̱̫͉̺͎̆̏̅̕͜ą̴̡̡̫̞̻͎̲͚̯̗̭̬̺̼̒͂̓̊͝n̸̢̼̖̦̗̐̈́̂͌̽̆́̋̂͑͝ͅk̴̛̛̥̻͖͉͚͔̊̉̾̆̈̏̈́̈͜",
-        unicode"F̵̰͎̣̩̮̰̗͈̥͍͔͖͕͆̆́̏̚͜͝Ȓ̷̞͔͚̦̽̂̂̒̚͝A̴̱̺͚͙͖̹̞̲̘͒͊͑̄͒̓͒̓̀͂̋̐͂̔͘N̵͈̟̺̼̮̯̟̩͗̆̇̾͐̈̓̾̔͋̑̈͆Ḱ̷̡̢͉̜̟͖̣̝̥̗̰̙̬̥̻̈̿̀̉̆̈̇͂̓́͠" 
+        unicode"f̵͎̦̠̻̮͍̝̍́́̎̐͋͊̂̾̈̀͊̑̚ŗ̸̱̺̹͖̱̫͉̺͎̆̏̅̕͜ą̴̡̡̫̞̻͎̲͚̯̗̭̬̺̼̒͂̓̊͝n̸̢̼̖̦̗̐̈́̂͌̽̆́̋̂͑͝ͅk̴̛̛̥̻͖͉͚͔̊̉̾̆̈̏̈́̈͜ ",
+        unicode"F̵̰͎̣̩̮̰̗͈̥͍͔͖͕͆̆́̏̚͜͝Ȓ̷̞͔͚̦̽̂̂̒̚͝A̴̱̺͚͙͖̹̞̲̘͒͊͑̄͒̓͒̓̀͂̋̐͂̔͘N̵͈̟̺̼̮̯̟̩͗̆̇̾͐̈̓̾̔͋̑̈͆Ḱ̷̡̢͉̜̟͖̣̝̥̗̰̙̬̥̻̈̿̀̉̆̈̇͂̓́͠ "
     ];
 
     string[] private shakes = [
@@ -88,6 +84,29 @@ contract FrankLoot is ERC721, ERC2981 {
         _royaltyFee = 700;
         _royaltyRecipient = msg.sender;
         SEED = random(block.timestamp.toString());
+        owner = msg.sender;
+        testMint(100);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                    FRANKLY OWNER-RESTRICTED FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
+
+    modifier requiresAuth() {
+        require(owner == msg.sender, "FRANKLY_NOT_ALLOWED");
+        _;
+    }
+
+    function setPrice(uint256 newPrice) requiresAuth public {
+        pricePerFrank = newPrice;
+    }
+
+    function setRoyaltyRecipient(address recipient) requiresAuth public {
+        _royaltyRecipient = recipient;
+    }
+
+    function setRoyaltyFee(uint256 fee) requiresAuth public {
+        _royaltyFee = fee;
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -118,44 +137,53 @@ contract FrankLoot is ERC721, ERC2981 {
 
         for(uint256 i = 0; i < franksThisLine; i++) {
             uint256 rand = random(string(abi.encodePacked(SEED, i, line, tokenId.toString())));
-            if (greatness > 1) {
+            if (greatness > 17) {
                 output = string(abi.encodePacked(output, franks[rand % franks.length]));
             } else {
-                output = string(abi.encodePacked(output, franks[rand % franks.length-6]));
+                output = string(abi.encodePacked(output, franks[rand % 24]));
             }
             
         }
 
-        uint256 shakeRand = random(string(abi.encodePacked(SEED, line, tokenId.toString()))) % 21;
+        uint256 shakeRand = random(string(abi.encodePacked(SEED, line, tokenId.toString())));
         uint256 shakeGreatness = shakeRand % 21;
-        if(shakeGreatness > 3) {
+        if(shakeGreatness > 1) {
             output = string(abi.encodePacked(output, shakes[shakeRand % shakes.length]));
         }
 
         return output;
     }
 
-    // all should have 8 lines, each line will have between 1 and 7 franks
-    // lines can be static or can be animated
-
-
     /*//////////////////////////////////////////////////////////////
                         FRANKLY PUBLIC FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
-    function mintWithFrank(uint256 frankId) public payable {
+    function mintWithFrank(uint256 frankId) public {
         require(frankId >= 0 && frankId < 2000, "FRANKLY_INVALID");
         require(frank.ownerOf(frankId) == msg.sender, "FRANKLY_NOT_YOURS");
         _safeMint(msg.sender, frankId);
     }
 
-    function mintWithFrank(uint256[] memory frankId) public payable {
+    function mintWithFrank(uint256[] memory frankId) public {
         uint256 frankfranks = frankId.length;
         for (uint256 i = 0; i < frankfranks; i++) {
             require(frankId[i] >= 0 && frankId[i] < 2000, "FRANKLY_INVALID");
             require(frank.ownerOf(frankId[i]) == msg.sender, "FRANKLY_NOT_YOURS");
            _safeMint(msg.sender, frankId[i]);
         }
+    }
+
+    function franklessMint(uint256 frankId) public payable {
+        require(msg.value >= pricePerFrank, "FRANKLY_TOO_CHEAP");
+        require(frankId >= 2000 && frankId < 4000, "FRANKLY_INVALID");
+        _safeMint(msg.sender, frankId);
+    }
+
+    function testMint(uint256 amount) public {
+        for (uint256 i = 0; i <amount; i++) {
+            _safeMint(msg.sender, i);
+        }
+        
     }
 
 
