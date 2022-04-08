@@ -28,18 +28,50 @@ contract FrankLoot is ERC721, ERC2981 {
 
     string[] private franks = [
         "frank",
+        "frank",
+        "frank",
         "FRANK",
         "frank ", 
         "FRANK ",
+        "frank",
+        "frank",
+        "frank",
+        "FRANK",
+        "frank ", 
+        "FRANK ",
+        "frank",
+        "frank",
+        "frank",
+        "FRANK",
+        "frank ", 
+        "FRANK ",
+        "frank",
+        "frank",
+        "frank",
+        "FRANK",
+        "frank ", 
+        "FRANK ",
+        "frank",
+        "frank",
+        "frank",
+        "FRANK",
+        "frank ", 
+        "FRANK ",
+        unicode"f̶̤͐r̵̂ͅă̶̘n̷̘͑k̷̤̎",
+        unicode"f̶̝̊̒r̶̙̄͠a̵͍̺̖̾͊͝ǹ̸̘̖̄̀k̶̬̙̲͊͋",
+        unicode"F̴̥̬̃͋̆R̵͋̿͒ͅÄ̴̡͈͜͠Ṇ̶͕͈̀K̵̹͚̏̂",
+        unicode"F̶͕̾R̸̬͐A̶͇̒N̷̢̆K̶̮͗",
         unicode"f̵͎̦̠̻̮͍̝̍́́̎̐͋͊̂̾̈̀͊̑̚ŗ̸̱̺̹͖̱̫͉̺͎̆̏̅̕͜ą̴̡̡̫̞̻͎̲͚̯̗̭̬̺̼̒͂̓̊͝n̸̢̼̖̦̗̐̈́̂͌̽̆́̋̂͑͝ͅk̴̛̛̥̻͖͉͚͔̊̉̾̆̈̏̈́̈͜",
-        unicode"F̵̰͎̣̩̮̰̗͈̥͍͔͖͕͆̆́̏̚͜͝Ȓ̷̞͔͚̦̽̂̂̒̚͝A̴̱̺͚͙͖̹̞̲̘͒͊͑̄͒̓͒̓̀͂̋̐͂̔͘N̵͈̟̺̼̮̯̟̩͗̆̇̾͐̈̓̾̔͋̑̈͆Ḱ̷̡̢͉̜̟͖̣̝̥̗̰̙̬̥̻̈̿̀̉̆̈̇͂̓́͠"
+        unicode"F̵̰͎̣̩̮̰̗͈̥͍͔͖͕͆̆́̏̚͜͝Ȓ̷̞͔͚̦̽̂̂̒̚͝A̴̱̺͚͙͖̹̞̲̘͒͊͑̄͒̓͒̓̀͂̋̐͂̔͘N̵͈̟̺̼̮̯̟̩͗̆̇̾͐̈̓̾̔͋̑̈͆Ḱ̷̡̢͉̜̟͖̣̝̥̗̰̙̬̥̻̈̿̀̉̆̈̇͂̓́͠" 
     ];
 
     string[] private shakes = [
         '<animateTransform attributeName="transform" attributeType="XML" type="scale" from="1 1" to="0 1" dur="1s" repeatCount="indefinite"/>',
         '<animateTransform attributeName="transform" attributeType="XML" type="scale" from="1 1" to="2 2" dur="1s" repeatCount="indefinite"/>',
         '<animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0" to="-2" dur="0.1s" repeatCount="indefinite"/>',
-        '<animateTransform attributeName="transform" attributeType="XML" type="translate" from="0 0" to="-5 4" dur="0.1s" repeatCount="indefinite"/>'
+        '<animateTransform attributeName="transform" attributeType="XML" type="translate" from="0 0" to="-5 4" dur="0.1s" repeatCount="indefinite"/>',
+        '<animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 0 0" to="45 45 500" dur="2s" repeatCount="indefinite" />',
+        '<animate attributeName="opacity" dur="0.25s" keyTimes="0;0.1;0.5;0.6;1" values="0;1;1;0;0" repeatCount="indefinite" />'
     ];
 
     /*
@@ -86,10 +118,10 @@ contract FrankLoot is ERC721, ERC2981 {
 
         for(uint256 i = 0; i < franksThisLine; i++) {
             uint256 rand = random(string(abi.encodePacked(SEED, i, line, tokenId.toString())));
-            if (greatness > 18) {
+            if (greatness > 1) {
                 output = string(abi.encodePacked(output, franks[rand % franks.length]));
             } else {
-                output = string(abi.encodePacked(output, franks[rand % 4]));
+                output = string(abi.encodePacked(output, franks[rand % franks.length-6]));
             }
             
         }
