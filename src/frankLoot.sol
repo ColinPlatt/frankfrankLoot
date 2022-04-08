@@ -95,7 +95,8 @@ contract FrankLoot is ERC721, ERC2981 {
         }
 
         uint256 shakeRand = random(string(abi.encodePacked(SEED, line, tokenId.toString()))) % 21;
-        if(greatness > 16) {
+        uint256 shakeGreatness = shakeRand % 21;
+        if(shakeGreatness > 3) {
             output = string(abi.encodePacked(output, shakes[shakeRand % shakes.length]));
         }
 
