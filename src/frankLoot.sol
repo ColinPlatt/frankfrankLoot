@@ -30,7 +30,9 @@ contract FrankLoot is ERC721, ERC2981 {
         "frank",
         "FRANK",
         "frank ", 
-        "FRANK "
+        "FRANK ",
+        unicode"f̵͎̦̠̻̮͍̝̍́́̎̐͋͊̂̾̈̀͊̑̚ŗ̸̱̺̹͖̱̫͉̺͎̆̏̅̕͜ą̴̡̡̫̞̻͎̲͚̯̗̭̬̺̼̒͂̓̊͝n̸̢̼̖̦̗̐̈́̂͌̽̆́̋̂͑͝ͅk̴̛̛̥̻͖͉͚͔̊̉̾̆̈̏̈́̈͜",
+        unicode"F̵̰͎̣̩̮̰̗͈̥͍͔͖͕͆̆́̏̚͜͝Ȓ̷̞͔͚̦̽̂̂̒̚͝A̴̱̺͚͙͖̹̞̲̘͒͊͑̄͒̓͒̓̀͂̋̐͂̔͘N̵͈̟̺̼̮̯̟̩͗̆̇̾͐̈̓̾̔͋̑̈͆Ḱ̷̡̢͉̜̟͖̣̝̥̗̰̙̬̥̻̈̿̀̉̆̈̇͂̓́͠"
     ];
 
     /*//////////////////////////////////////////////////////////////
@@ -57,8 +59,8 @@ contract FrankLoot is ERC721, ERC2981 {
         uint256 rand = random(string(abi.encodePacked(SEED, _tokenId.toString())));
         uint256 greatness = rand % 21;
 
-        if (greatness > 7) {
-            return random(string(abi.encodePacked(_line.toString(), _tokenId.toString()))) % 4 + 2;
+        if (greatness > 12) {
+            return random(string(abi.encodePacked(_line.toString(), _tokenId.toString()))) % 6 + 2;
         } else {
             return 1;
         }
@@ -67,12 +69,18 @@ contract FrankLoot is ERC721, ERC2981 {
 
     function getLine(uint256 tokenId, uint256 line) internal view returns (string memory) {
         uint256 franksThisLine = franksPerLine(tokenId, line);
+        uint256 greatness = random(string(abi.encodePacked(SEED, line, tokenId.toString()))) % 21;
 
         string memory output;
 
         for(uint256 i = 0; i < franksThisLine; i++) {
             uint256 rand = random(string(abi.encodePacked(SEED, i, line, tokenId.toString())));
-            output = string(abi.encodePacked(output, franks[rand % franks.length]));
+            if (greatness > 1) {
+                output = string(abi.encodePacked(output, franks[rand % franks.length]));
+            } else {
+                output = string(abi.encodePacked(output, franks[rand % 4]));
+            }
+            
         }
 
         return output;
@@ -107,7 +115,7 @@ contract FrankLoot is ERC721, ERC2981 {
     //////////////////////////////////////////////////////////////*/
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        string[17] memory parts;
+        string[25] memory parts;
         parts[
             0
         ] = '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350"><style>.base { fill: white; font-family: serif; font-size: 14px; }</style><rect width="100%" height="100%" fill="black" /><text x="10" y="20" class="base">';
@@ -142,7 +150,23 @@ contract FrankLoot is ERC721, ERC2981 {
 
         parts[15] = getLine(tokenId, 8);
 
-        parts[16] = "</text></svg>";
+        parts[16] = '</text><text x="10" y="180" class="base">';
+
+        parts[17] = getLine(tokenId, 9);
+
+        parts[18] = '</text><text x="10" y="200" class="base">';
+
+        parts[19] = getLine(tokenId, 10);
+
+        parts[20] = '</text><text x="10" y="220" class="base">';
+
+        parts[21] = getLine(tokenId, 11);
+
+        parts[22] = '</text><text x="10" y="240" class="base">';
+
+        parts[23] = getLine(tokenId, 12);
+
+        parts[24] = "</text></svg>";
 
         string memory output = string(
             abi.encodePacked(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7], parts[8])
@@ -158,6 +182,20 @@ contract FrankLoot is ERC721, ERC2981 {
                 parts[14],
                 parts[15],
                 parts[16]
+            )
+        );
+
+                output = string(
+            abi.encodePacked(
+                output,
+                parts[17], 
+                parts[18],
+                parts[19],
+                parts[20],
+                parts[21],
+                parts[22],
+                parts[23],
+                parts[24]
             )
         );
 
