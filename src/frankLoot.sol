@@ -35,6 +35,17 @@ contract FrankLoot is ERC721, ERC2981 {
         unicode"F̵̰͎̣̩̮̰̗͈̥͍͔͖͕͆̆́̏̚͜͝Ȓ̷̞͔͚̦̽̂̂̒̚͝A̴̱̺͚͙͖̹̞̲̘͒͊͑̄͒̓͒̓̀͂̋̐͂̔͘N̵͈̟̺̼̮̯̟̩͗̆̇̾͐̈̓̾̔͋̑̈͆Ḱ̷̡̢͉̜̟͖̣̝̥̗̰̙̬̥̻̈̿̀̉̆̈̇͂̓́͠"
     ];
 
+    string[] private shakes = [
+        '<animateTransform attributeName="transform" attributeType="XML" type="scale" from="1 1" to="0 1" dur="1s" repeatCount="indefinite"/>',
+        '<animateTransform attributeName="transform" attributeType="XML" type="scale" from="1 1" to="2 2" dur="1s" repeatCount="indefinite"/>',
+        '<animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0" to="-2" dur="0.1s" repeatCount="indefinite"/>',
+        '<animateTransform attributeName="transform" attributeType="XML" type="translate" from="0 0" to="-5 4" dur="0.1s" repeatCount="indefinite"/>'
+    ];
+
+    /*
+   
+    */
+
     /*//////////////////////////////////////////////////////////////
                                 CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
@@ -81,6 +92,11 @@ contract FrankLoot is ERC721, ERC2981 {
                 output = string(abi.encodePacked(output, franks[rand % 4]));
             }
             
+        }
+
+        uint256 shakeRand = random(string(abi.encodePacked(SEED, line, tokenId.toString()))) % 21;
+        if(greatness > 16) {
+            output = string(abi.encodePacked(output, shakes[shakeRand % shakes.length]));
         }
 
         return output;

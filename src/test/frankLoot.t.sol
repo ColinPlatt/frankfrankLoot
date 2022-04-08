@@ -84,9 +84,7 @@ contract FrankLootTest is DSTest, ERC721TokenReceiver {
 
         frankLoot.mintWithFrank(bulkList);
 
-        for(uint256 i = 0; i<10; i++) {
-            emit log_string(frankLoot.tokenURI(i));
-        }
+        emit log_string(frankLoot.tokenURI(9));
     }
 
     
