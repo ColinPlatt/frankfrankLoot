@@ -15,11 +15,14 @@ interface IFrank {
 /// @title Frank
 /// @author frank
 contract FrankFrankLoot is ERC721, ERC2981 {
+    using Strings for uint256;
     /*//////////////////////////////////////////////////////////////
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
 
     IFrank public immutable frank = IFrank(0x91680cF5F9071cafAE21B90ebf2c9CC9e480fB93);
+
+    uint256 public SEED;
 
     string[] private franks = [
         "frank",
@@ -36,12 +39,42 @@ contract FrankFrankLoot is ERC721, ERC2981 {
     ERC721("frankLoot", "FRANKLOOT") {
         _royaltyFee = 700;
         _royaltyRecipient = msg.sender;
+        SEED = random(block.timestamp);
     }
 
     /*//////////////////////////////////////////////////////////////
                         FRANKLY INTERNAL FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
+    function random(string memory input) internal pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(SEED, input)));
+    }
+
+    function franksPerLine(uint256 _tokenId, uint256 _line) internal view returns (uint256) {
+        uint256 rand = random(string(abi.encodePacked(SEED, _tokenId.toString())));
+        uint256 greatness = rand % 21;
+
+        if (greatness > 7) {
+            return random(string(abi.encodePacked(_line.toString(), _tokenId.toString()))) % 4 + 2;
+        } else {
+            return 1;
+        }
+
+    }
+
+    function pluckLine(uint256 tokenId, uint256 line) internal view returns (string memory) {
+        uint256 franksThisLine = franksPerLine(tokenId, line);
+
+        string memory output;
+
+        for(uint256 i = 0; i < franksThisLine; i++) {
+            uint256 rand = random(string(abi.encodePacked(SEED, i, line, tokenId.toString())));
+            output = string(abi.encodePacked(output, franks[rand % franks.length]));
+        }
+    }
+
+    // all should have 8 lines, each line will have between 1 and 7 franks
+    // lines can be static or can be animated
 
 
     /*//////////////////////////////////////////////////////////////
