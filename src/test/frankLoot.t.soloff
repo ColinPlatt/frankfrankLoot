@@ -33,7 +33,7 @@ contract FrankLootTest is DSTest, ERC721TokenReceiver {
 
     function setUp() public {
         frank = new DummyERC721();
-        frankLoot = new FrankLoot(address(frank));
+        frankLoot = new FrankLoot();
     }
 
     function testInvariantMetaData() public {
